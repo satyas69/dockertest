@@ -19,6 +19,9 @@ jobs:
       - name: Run container
         run: docker run -d -p 8080:80 --name my-demo-container my-demo-image:latest
 
+      - name: Wait for container to be ready
+        run: sleep 5
+
       - name: Test container
         run: curl --fail http://localhost:8080
 
