@@ -1,4 +1,4 @@
-name: Docker Build
+name: Docker Build and Test
 
 on:
   push:
@@ -6,15 +6,21 @@ on:
       - 'Dockerfile'
 
 jobs:
-  docker-build:
+  docker-test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Build Docker image
         run: docker build -t my-demo-image:latest .
 
-      - name: Verify Docker image
-        run: docker images my-demo-image:latest
+      - name: Run container
+        run: docker run -d -p 8080:80 --name my-demo-container my-demo-image:latest
+
+      - name: Test container
+        run: curl --fail http://localhost:8080
+
+      - name: Stop container
+        run: docker stop my-demo-container
